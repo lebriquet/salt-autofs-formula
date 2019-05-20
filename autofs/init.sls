@@ -48,7 +48,7 @@ autofs__file_/etc/auto.master.d/{{autofsmap}}.autofs:
     - user: root
     - group: root
     - mode: 0644
-    - contents: "{{autofsmap_data.mount}} /etc/auto.{{autofsmap}}  {{autofsmap_data.opts|default('')}}"
+    - contents: "{{autofsmap_data.mount}} /etc/auto.{{autofsmap}}"
     - contents_newline: True
     - require:
       - pkg: autofs__pkg_autofs
@@ -70,7 +70,7 @@ autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
   file.replace:
     - name: /etc/auto.{{autofsmap}}
     - pattern: ^\s*{{entity}}\s+.*$
-    - repl: "{{entity}} {{entity_data.opts|default('')}}  {{entity_data.source}}" 
+    - repl: "{{entity}} {{autofsmap_data.opts|default('')}} {{entity_data.source}}" 
     - count: 1
     - append_if_not_found: True
     - require:
