@@ -75,9 +75,9 @@ autofs__credentials_/root/.autofs-{{ autofsmap }}:
     - group: root
     - mode: 0600
     - contents: |
-        {% for key, value in autofsmap_data.credentials.items() -%}
+        {% for key, value in autofsmap_data.credentials.items() %}
         {{ key }}={{ value }}
-        {%- endfor %}
+        {% endfor %}
 {% endif %}
 
 {% for entity, entity_data in autofsmap_data.entities.items() %}
