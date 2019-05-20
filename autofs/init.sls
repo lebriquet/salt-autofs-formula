@@ -66,10 +66,10 @@ autofs__file_/etc/auto.{{autofsmap}}:
     - mode: 0644
 
 {% if autofsmap_data.credentials is defined %}
-{% set auth = autofsmap_data.opts + ',credentials=/root/.{{ autofsmap }}-cifs' %}
-autofs__credentials_/root/.autofs:
+{% set auth = autofsmap_data.opts + ',credentials=/root/.autofs-{{ autofsmap }}' %}
+autofs__credentials_/root/.autofs-{{ autofsmap }}:
   file.managed:
-    - name: /root/.autofs
+    - name: /root/.autofs-{{ autofsmap }}
     - replace: True
     - user: root
     - group: root
