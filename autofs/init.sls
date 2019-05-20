@@ -48,7 +48,7 @@ autofs__file_/etc/auto.master.d/{{autofsmap}}.autofs:
     - user: root
     - group: root
     - mode: 0644
-    - contents: "{{autofsmap_data.mount}} /etc/auto.{{autofsmap}}"
+    - contents: "{{autofsmap_data.mount}} /etc/auto.{{autofsmap}} --timeout=0"
     - contents_newline: True
     - require:
       - pkg: autofs__pkg_autofs
@@ -64,6 +64,22 @@ autofs__file_/etc/auto.{{autofsmap}}:
     - user: root
     - group: root
     - mode: 0644
+
+{% if credentials in autofsmap_data %}
+{% set autofsmap_data.credentials = autofsmap_data.credentials + ',credentials=/root/.cifs' %}
+autofs__credentials_/root/.autofs:
+  file.managed:
+    - name: /root/.autofs
+    - replace: True
+    - user: root
+    - group: root
+    - mode: 0600
+    - contents: |
+        {% for key, value in autofsmap_data.credentials.items() -%}
+        {{ key }}={{ value }}
+        {%- endfor %}
+
+{% endif %}
 
 {% for entity, entity_data in autofsmap_data.entities.items() %}
 autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
