@@ -66,7 +66,7 @@ autofs__file_/etc/auto.{{autofsmap}}:
     - mode: 0644
 
 {% if autofsmap_data.credentials is defined %}
-{% set autofsmap_data.credentials = autofsmap_data.credentials + ',credentials=/root/.cifs' %}
+{% set autofsmap_data.opts = autofsmap_data.opts + ',credentials=/root/.cifs' %}
 autofs__credentials_/root/.autofs:
   file.managed:
     - name: /root/.autofs
