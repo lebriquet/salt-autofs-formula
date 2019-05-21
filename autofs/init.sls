@@ -74,7 +74,7 @@ autofs__file_/etc/auto.{{autofsmap}}:
     - name: /etc/auto.{{autofsmap}}
     - contents: |
         {% for entity, entity_data in autofsmap_data.entities.items() -%}
-        {% set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') %}
+        {%- set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') -%}
         "{{ mnt_string }}" 
         {% endfor %}
     - require:
