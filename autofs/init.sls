@@ -56,14 +56,6 @@ autofs__file_/etc/auto.master.d/{{autofsmap}}.autofs:
     - watch_in:
       - service: autofs__service_autofs
 
-autofs__file_/etc/auto.{{autofsmap}}:
-  file.managed:
-    - name: /etc/auto.{{autofsmap}}
-    - replace: False
-    - user: root
-    - group: root
-    - mode: 0644
-
 {% if autofsmap_data.credentials is defined %}
 {% set auth = autofsmap_data.opts ~ ',credentials=/root/.autofs-' ~ autofsmap %}
 autofs__credentials_/root/.autofs-{{ autofsmap }}:
