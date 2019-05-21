@@ -79,7 +79,6 @@ autofs__file_/etc/auto.{{autofsmap}}:
         {% endfor %}
     - require:
       - pkg: autofs__pkg_autofs
-      - file: autofs__file_/etc/auto.{{autofsmap}}
       - file: autofs__file_/etc/auto.master
       - file: autofs__file_/etc/auto.master.d
     - watch_in:
