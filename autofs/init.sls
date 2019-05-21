@@ -77,8 +77,8 @@ autofs__credentials_/root/.autofs-{{ autofsmap }}:
         {{ key }}={{ value }}
         {% endfor %}
 {% endif %}
-{% set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') %}
 {% for entity, entity_data in autofsmap_data.entities.items() %}
+{% set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') %}
 autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
   file.replace:
     - name: /etc/auto.{{autofsmap}}
