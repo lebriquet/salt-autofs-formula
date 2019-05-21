@@ -31,7 +31,6 @@ autofs__file_/etc/auto.master:
     - group: root
     - mode: 0644
     - contents: "+dir:/etc/auto.master.d"
-    - contents_newline: True
     - require:
       - pkg: autofs__pkg_autofs
       - file: autofs__file_/etc/auto.master.d
@@ -70,7 +69,6 @@ autofs__file_/etc/auto.{{autofsmap}}:
 autofs__credentials_/root/.autofs-{{ autofsmap }}:
   file.managed:
     - name: /root/.autofs-{{ autofsmap }}
-    - replace: True
     - user: root
     - group: root
     - mode: 0600
@@ -78,18 +76,13 @@ autofs__credentials_/root/.autofs-{{ autofsmap }}:
         {% for key, value in autofsmap_data.credentials.items() -%}
         {{ key }}={{ value }}
         {% endfor %}
-{% else %}
-{% set auth = [entity, autofsmap_data.opts|default(''), entity_data.source] | join(' ') %}
 {% endif %}
-
+{% set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') %}
 {% for entity, entity_data in autofsmap_data.entities.items() %}
 autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
   file.replace:
     - name: /etc/auto.{{autofsmap}}
-    - pattern: ^\s*{{entity}}\s+.*$
-    - repl: "{{ auth }}" 
-    - count: 1
-    - append_if_not_found: True
+    - contents: "{{ mnt_string }}" 
     - require:
       - pkg: autofs__pkg_autofs
       - file: autofs__file_/etc/auto.{{autofsmap}}
