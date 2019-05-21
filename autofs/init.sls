@@ -77,7 +77,7 @@ autofs__credentials_/root/.autofs-{{ autofsmap }}:
         {{ key }}={{ value }}
         {% endfor %}
 {% endif %}
-autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
+autofs__file_/etc/auto.{{autofsmap}}:
   file.managed:
     - name: /etc/auto.{{autofsmap}}
     - contents: |
