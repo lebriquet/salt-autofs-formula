@@ -77,12 +77,14 @@ autofs__credentials_/root/.autofs-{{ autofsmap }}:
         {{ key }}={{ value }}
         {% endfor %}
 {% endif %}
-{% for entity, entity_data in autofsmap_data.entities.items() %}
-{% set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') %}
 autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
-  file.replace:
+  file.managed:
     - name: /etc/auto.{{autofsmap}}
-    - contents: "{{ mnt_string }}" 
+    - contents: |
+        {% for entity, entity_data in autofsmap_data.entities.items() %}
+        {% set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') %}
+        "{{ mnt_string }}" 
+        {% endfor %}
     - require:
       - pkg: autofs__pkg_autofs
       - file: autofs__file_/etc/auto.{{autofsmap}}
@@ -90,7 +92,6 @@ autofs__file_/etc/auto.{{autofsmap}}_{{entity}}:
       - file: autofs__file_/etc/auto.master.d
     - watch_in:
       - service: autofs__service_autofs
-{% endfor %}
 {% endfor %}
 {% endif %}
 
