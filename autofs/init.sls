@@ -76,7 +76,7 @@ autofs__file_/etc/auto.{{autofsmap}}:
     - name: /etc/auto.{{autofsmap}}
     - contents: |
         {% for entity, entity_data in autofsmap_data.entities.items() -%}
-        {{ [entity, opt_str|default(''), entity_data.source] | join(' ') }}
+        {{ [entity, opt_str{% if entity_data.opts is defined %}~','~entity_data.opts|default(''){% endif %}, entity_data.source] | join(' ') }}
         {% endfor %}
     - require:
       - pkg: autofs__pkg_autofs

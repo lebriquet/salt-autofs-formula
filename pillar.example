@@ -1,7 +1,7 @@
 autofs:
   lookup:
     maps:
-      direct1:
+      nfs:
         opts: "--timeout=0,-fstype=nfs,nfsvers=3,rw,soft,intr,rsize=262144,wsize=262144"
         #direct map
         mount: "/-"
@@ -11,13 +11,17 @@ autofs:
             opts: noatime
           /srv/export2:
             source: nfsserver:/srv/export2
-      direct2:
-        opts: "--timeout=0,-fstype=nfs,nfsvers=3,rw,soft,intr,rsize=1048576,wsize=1048576"
+      samba:
+        opts: "-fstype=cifs,uid=1001,gid=1001"
         #direct map
-        mount: "/-"
+        mount: "/srv"
+        credentials:
+          domain: workgroup
+          username: uname
+          password: pwstring
         entities:
-          /srv/export3:
-            source: nfsserver2:/srv/export3
-            opts: noatime,nodiratime
-          /srv/export4:
-            source: nfsserver2:/srv/export4
+          export3:
+            source: ://sambaserver/srv/export3
+            opts: cache=strict
+          export4:
+            source: ://sambaserver/srv/export4
