@@ -94,3 +94,5 @@ autofs__service_autofs:
     - enable: true
     - require:
       - pkg: autofs__pkg_autofs
+    - watch: 
+      - file: autofs__file_/etc/auto.*
