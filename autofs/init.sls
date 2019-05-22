@@ -57,7 +57,7 @@ autofs__file_/etc/auto.master.d/{{autofsmap}}.autofs:
       - service: autofs__service_autofs
 
 {% if autofsmap_data.credentials is defined %}
-{% set auth = autofsmap_data.opts ~ ',credentials=/root/.autofs-' ~ autofsmap %}
+{% set opt_str = autofsmap_data.opts ~ ',credentials=/root/.autofs-' ~ autofsmap %}
 autofs__credentials_/root/.autofs-{{ autofsmap }}:
   file.managed:
     - name: /root/.autofs-{{ autofsmap }}
@@ -68,13 +68,15 @@ autofs__credentials_/root/.autofs-{{ autofsmap }}:
         {% for key, value in autofsmap_data.credentials.items() -%}
         {{ key }}={{ value }}
         {% endfor %}
+{% else %}
+{% set opt_str = autofsmap_data.opts %}
 {% endif %}
 autofs__file_/etc/auto.{{autofsmap}}:
   file.managed:
     - name: /etc/auto.{{autofsmap}}
     - contents: |
         {% for entity, entity_data in autofsmap_data.entities.items() -%}
-        {%- set mnt_string = [entity, auth|default(''), entity_data.source] | join(' ') -%}
+        {%- set mnt_string = [entity, opt_str|default(''), entity_data.source] | join(' ') -%}
         {{ mnt_string }}
         {% endfor %}
     - require:
