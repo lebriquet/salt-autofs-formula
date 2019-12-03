@@ -1,4 +1,5 @@
 # vim: sts=2 ts=2 sw=2 et ai
+{%- if pillar.get('autofs', {}).get('enabled', False) %}
 {% from "autofs/map.jinja" import autofs with context %}
 
 autofs__pkg_autofs:
@@ -97,3 +98,5 @@ autofs__service_autofs:
       - pkg: autofs__pkg_autofs
     - watch: 
       - file: autofs__file_/etc/auto.*
+
+{% endif %}
